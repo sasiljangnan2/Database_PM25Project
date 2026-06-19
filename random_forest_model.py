@@ -109,5 +109,22 @@ def run_random_forest():
     plt.savefig('rf_feature_importance.png', dpi=300)
     print("\n[저장 완료] 'rf_feature_importance.png' 그림 파일이 생성되었습니다.")
 
+    # =====================================================================
+    # 월별 초미세먼지(PM2.5) 평균 시각화
+    # ---------------------------------------------------------------------
+    # - 월별 타겟 값의 평균을 계산하여 계절성 패턴 시각화
+    # - 'monthly_pm25_avg.png' 파일로 결과물 저장
+    # =====================================================================
+    plt.figure(figsize=(10, 6))
+    monthly_avg = df.groupby('월')['초미세먼지(PM25)'].mean().reset_index()
+    sns.barplot(x='월', y='초미세먼지(PM25)', data=monthly_avg, palette='coolwarm', hue='월', legend=False)
+    plt.title('월별 초미세먼지(PM2.5) 평균 농도')
+    plt.xlabel('월 (Month)')
+    plt.ylabel('평균 초미세먼지 농도 (PM2.5)')
+    plt.tight_layout()
+    
+    plt.savefig('monthly_pm25_avg.png', dpi=300)
+    print("[저장 완료] 'monthly_pm25_avg.png' 그림 파일이 생성되었습니다.")
+
 if __name__ == "__main__":
     run_random_forest()
