@@ -109,10 +109,11 @@ print(result_df.round(4).to_string(index=False))
 
 
 # =====================================================================
-# 시각화 1) 예측 vs 실제 (Ridge 기준)
+# 시각화 1) 예측 vs 실제 (Ridge 및 Lasso 기준)
 # =====================================================================
-fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
+# Ridge 회귀 예측
 y_pred_ridge = ridge_best.predict(X_test_sc)
 axes[0].scatter(y_test, y_pred_ridge, alpha=0.3, s=10)
 axes[0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
@@ -120,12 +121,20 @@ axes[0].set_xlabel('실제 PM2.5')
 axes[0].set_ylabel('예측 PM2.5')
 axes[0].set_title('Ridge 회귀: 예측값 vs 실제값')
 
+# Lasso 회귀 예측
+y_pred_lasso = lasso_best.predict(X_test_sc)
+axes[1].scatter(y_test, y_pred_lasso, alpha=0.3, s=10, color='green')
+axes[1].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+axes[1].set_xlabel('실제 PM2.5')
+axes[1].set_ylabel('예측 PM2.5')
+axes[1].set_title('Lasso 회귀: 예측값 vs 실제값')
+
 # 시각화 2) 회귀계수 비교 막대그래프
 coef_plot = coef_df.set_index('Feature')
-coef_plot.plot(kind='barh', ax=axes[1])
-axes[1].set_title('회귀계수 비교 (영향력)')
-axes[1].set_xlabel('계수 크기')
-axes[1].axvline(0, color='gray', linewidth=0.8)
+coef_plot.plot(kind='barh', ax=axes[2])
+axes[2].set_title('회귀계수 비교 (영향력)')
+axes[2].set_xlabel('계수 크기')
+axes[2].axvline(0, color='gray', linewidth=0.8)
 
 plt.tight_layout()
 plt.savefig('ridge_lasso_result.png', dpi=200)
